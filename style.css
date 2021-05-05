@@ -1,0 +1,13 @@
+#download{
+    color: rgb(255, 255, 255);
+}
+
+.link_style:hover{
+    transform: scale(1.4);
+}
+.link_style{
+    transition: 0.5s ease;
+}
+body{
+    background-color: rgb(1, 23, 71);
+}

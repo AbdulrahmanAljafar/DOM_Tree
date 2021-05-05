@@ -249,7 +249,7 @@ if(!flag){
         flag = true;
         if (context.isPointInPath(path, XY.x, XY.y)) {
 
-            alert(Dom.innerHTML)
+            alert(Dom.outerHTML)
 
         }
     }, false)
