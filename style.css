@@ -1,5 +1,5 @@
 #download{
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
 }
 
 .link_style:hover{
@@ -8,6 +8,25 @@
 .link_style{
     transition: 0.5s ease;
 }
-body{
-    background-color: rgb(1, 23, 71);
+
+
+#alertBox{
+    position:absolute;
+    top:100px;
+    left:100px;
+    border:solid 1px black;
+    background-color: #528CE0;
+    padding: 50px;
+    visibility: hidden;
+}
+#alertClose{
+    position: absolute;
+    right:0;
+    top: 0;
+    background-color: black;
+    border: solid 1px white;
+    color: white;
+    width: 1em;
+    text-align: center; 
+    cursor: pointer;
 }
