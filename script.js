@@ -536,7 +536,7 @@ function buttonMove(x, y, Dom) {
     
     if(!flag){
     document.addEventListener("mouseup", function (e) {
-        flag=true
+           flag=true
           select = false;  
     }, false)
 
