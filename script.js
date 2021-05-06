@@ -13,6 +13,7 @@ var array1 = []
 var flag = false;
 var select = false;
 var colorC = false;
+var messageDisplayed=false;
 
 
 
@@ -40,14 +41,23 @@ for (let index = 0; index < html.length; index++) {
 
 
 
-function drawC(x, y, tagName) {
+function drawC(x, y, Dom) {
+    if(Dom.x){
     context.beginPath();
-    context.arc(x, y, 30, 0, Math.PI * 2);
+    context.arc(Dom.x, Dom.y, 30, 0, Math.PI * 2);
     context.font = "10px Arial";
-    context.fillText(tagName, x, y, 50, 5);
+    context.fillText(Dom.tagName, Dom.x, Dom.y, 50, 5);
     context.stroke();
-
     context.closePath();
+    }
+    else{
+        context.beginPath();
+        context.arc(x, y, 30, 0, Math.PI * 2);
+        context.font = "10px Arial";
+        context.fillText(Dom.tagName, x, y, 50, 5);
+        context.stroke();
+        context.closePath();
+    }
 }
 
 
@@ -65,29 +75,47 @@ function drawR(x, y, text) {
     context.closePath();
 }
 
-function line(xstart, ystart, xend, yend) {
+function line(xstart, ystart, xend, yend,dom) {
+    if(dom.x){
+    context.beginPath();
+    context.moveTo(dom.parentElement.x2 + 25, dom.parentElement.y2 + 20);
+    context.lineTo(dom.x, dom.y);
+    context.stroke();
+    context.closePath();
+    }else{
     context.beginPath();
     context.moveTo(xstart, ystart);
     context.lineTo(xend, yend);
     context.stroke();
     context.closePath();
+    }
 }
 
 function DrawTree(xstart, xend, y, dom, dom1) {
 
-    drawC((xstart + xend) / 2, y + 80, dom.tagName)
-
+    drawC((xstart + xend) / 2, y + 80, dom)
+    dom.x2 = (xstart + xend) / 2;
+    dom.y2 = y + 80;
 
     if (count2 == 0) {
         dom1.setAttribute("id", count);
 
     }
-    //button
-    button(((xstart + xend) / 2) - 48, y + 70, dom)
-    buttonTag(((xstart + xend) / 2) - 48, y + 50, dom)
-    buttonNode(((xstart + xend) / 2), y + 70, dom)
-    buttonAdd(((xstart + xend) / 2), y + 70, dom)
-    // buttonMove(((xstart + xend) / 2), y + 70, dom)
+    //================================================button
+    if(dom.x){
+
+    button(dom.x -50, dom.y+20 , dom)
+    buttonTag(dom.x - 48, dom.y + 40, dom)
+    buttonNode(dom.x , dom.y , dom)
+    buttonAdd(dom.x , dom.y + 40, dom)
+    buttonMove(dom.x - 48, dom.y + 40, dom)
+    }else{
+        button(((xstart + xend) / 2) - 48, y + 70, dom)
+        buttonTag(((xstart + xend) / 2) - 48, y + 50, dom)
+        buttonNode(((xstart + xend) / 2), y + 70, dom)
+        buttonAdd(((xstart + xend) / 2), y + 70, dom)
+        buttonMove(((xstart + xend) / 2), y + 70, dom) 
+    }
     //====================================================
 
     var d = (xend - xstart) / dom.childNodes.length
@@ -103,14 +131,14 @@ function DrawTree(xstart, xend, y, dom, dom1) {
         // dom._$showElement = true
         if (dom.childNodes[index].nodeType == 1) {
             DrawTree(tempStart, tempEnd, y, dom.childNodes[index], dom);
-            line((xstart + xend) / 2, y + 10, (tempStart + tempEnd) / 2, y + 50)
+            line((xstart + xend) / 2, y + 10, (tempStart + tempEnd) / 2, y + 50,dom)
         }
         else if (dom.childNodes[index].nodeType == 3 && dom.childNodes[index].data.trim() != "") {
             console.log(dom.childNodes[index].data)
             drawR((xstart + xend) / 2 - 25, y + 50, dom.childNodes[index].data)
             buttonText(((xstart + xend) / 2), y + 70, dom.childNodes[index])
             buttonEdit(((xstart + xend) / 2), y + 70, dom.childNodes[index])
-            line((xstart + xend) / 2, y + 10, (tempStart + tempEnd) / 2, y + 50)
+            line((xstart + xend) / 2, y + 10, (tempStart + tempEnd) / 2, y + 50,dom)
         }
 
         tempStart += d;
@@ -127,6 +155,7 @@ count2++;
 var ss = "";
 function button(x, y, Dom) {
     const path = new Path2D()
+
 
     path.rect(x, y, 15, 15)
 
@@ -237,10 +266,12 @@ function buttonTag(x, y, Dom) {
 
 
 function buttonNode(x, y, Dom) {
-    const path = new Path2D()
-
-    path.rect(x - 15, y - 5, 30, 30)
-
+    var pathBtn = new Path2D() 
+    if(Dom.x){
+        pathBtn.rect(Dom.x-15, Dom.y-5, 15, 15)
+    }else{
+        pathBtn.rect(x - 15, y - 5, 30, 30)
+    }
 
     context.fillStyle = "black"
     context.font = "20px Georgia"
@@ -259,7 +290,7 @@ function buttonNode(x, y, Dom) {
         document.addEventListener("mousemove", function (e) {
             const XY = getXY(canvas, e)
             flag = true;
-            if (context.isPointInPath(path, XY.x, XY.y)) {
+            if (context.isPointInPath(pathBtn, XY.x, XY.y)) {
 
                 let timerInterval
                 Swal.fire({
@@ -359,7 +390,8 @@ function buttonText(x, y, Dom) {
             const XY = getXY(canvas, e)
             flag = true;
             if (context.isPointInPath(path, XY.x, XY.y)) {
-
+                if(messageDisplayed ){return}
+                messageDisplayed =true;
                 // alert(Dom.data)
                 
 
@@ -380,6 +412,9 @@ function buttonText(x, y, Dom) {
                     }
                 })
 
+            }
+            else{
+                messageDisplayed =false;
             }
         }, false)
     }
@@ -443,17 +478,15 @@ function buttonEdit(x, y, Dom) {
 function buttonMove(x, y, Dom) {
     const path = new Path2D()
 
-    path.rect(x - 15, y - 50, 30, 30)
+    path.rect(x - 15, y - 20, 30, 30)
 
 
     context.fillStyle = "White"
 
 
-    context.fill(path)
-    context.stroke(path)
+  
     context.fillStyle = "black"
-    context.font = "10px Georgia"
-    context.fillText("add", x - 48, y + 28);
+    
 
 
 
@@ -485,17 +518,15 @@ function buttonMove(x, y, Dom) {
         if (context.isPointInPath(path, XY.x, XY.y)) { 
 
           console.log(x + " " + y + "  "+ XY.x + " "+ XY.y)
-x
         //  
 
-          context.clearRect(0, 0, canvas.width, canvas.height);
+          Dom.x = XY.x;
+          Dom.y = XY.y + 50;
 
-          DrawTree(XY.x, XY.x, XY.y, html, html)
-
-        // //   context.globalCompositeOperation = 'destination-out'
-        //   context.arc(x, y, 45, 0, Math.PI * 2);
-        // //   context.fill();
-        //    drawC(XY.x, XY.y, Dom.tagName)
+      
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        pathBtn = new Path2D();
+        DrawTree(0, canvas.width, 55, html, html)
 
 
         }
