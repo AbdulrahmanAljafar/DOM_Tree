@@ -82,11 +82,14 @@ function DrawTree(xstart, xend, y, dom, dom1) {
         dom1.setAttribute("id", count);
 
     }
+    //button
     button(((xstart + xend) / 2) - 48, y + 70, dom)
     buttonTag(((xstart + xend) / 2) - 48, y + 50, dom)
     buttonNode(((xstart + xend) / 2), y + 70, dom)
     buttonAdd(((xstart + xend) / 2), y + 70, dom)
     // buttonMove(((xstart + xend) / 2), y + 70, dom)
+    //====================================================
+
     var d = (xend - xstart) / dom.childNodes.length
     var tempStart = xstart;
     var tempEnd = d + xstart;
@@ -419,11 +422,7 @@ function buttonEdit(x, y, Dom) {
 
                 var txt;
                 var Node = prompt("Edit the Text", Dom.data );
-                if (Node == null || Node == "") {
-                    txt = Dom.data;
-                } else {
-                    txt = Node;
-                }
+                txt = Node;
 
                 Dom.data = txt;
 
@@ -441,78 +440,77 @@ function buttonEdit(x, y, Dom) {
 
 
 
-// function buttonMove(x, y, Dom) {
-//     const path = new Path2D()
+function buttonMove(x, y, Dom) {
+    const path = new Path2D()
 
-//     path.rect(x - 15, y - 50, 30, 30)
-
-
-//     context.fillStyle = "White"
+    path.rect(x - 15, y - 50, 30, 30)
 
 
-//     context.fill(path)
-//     context.stroke(path)
-//     context.fillStyle = "black"
-//     context.font = "10px Georgia"
-//     context.fillText("add", x - 48, y + 28);
+    context.fillStyle = "White"
 
 
-
-
-//     function getXY(canvas, event) { //shape 
-//         const rect = canvas.getBoundingClientRect()
-//         const y = event.clientY - rect.top //mouse event
-//         const x = event.clientX - rect.left
-//         return { x: x, y: y }
-//     }
-
-
-
-//     document.addEventListener("mousedown", function (e) {
-//         const XY = getXY(canvas, e)
-//         if (context.isPointInPath(path, XY.x, XY.y)) { 
-
-//           console.log(x + " " + y + "  "+ XY.x + " "+ XY.y)
-//           select = true;
-//         }
-//     }, false)
-
-//     document.addEventListener("mousemove", function (e) {
-//         const XY = getXY(canvas, e)
-//         if(select){
-//         if (context.isPointInPath(path, XY.x, XY.y)) { 
-
-//           console.log(x + " " + y + "  "+ XY.x + " "+ XY.y)
-// x
-//         //  
-
-//         //   context.clearRect(0, 0, canvas.width, canvas.height);
-
-//         //   DrawTree(XY.x, XY.y, Dom)
-//         // //   context.globalCompositeOperation = 'destination-out'
-//         // //   context.arc(x, y, 45, 0, Math.PI * 2);
-//         // //   context.fill();
-//            drawC(XY.x, XY.y, Dom.tagName)
-
-
-//         }
-//     }
-
-//     }, false)
-
-//     document.addEventListener("mouseup", function (e) {
+    context.fill(path)
+    context.stroke(path)
+    context.fillStyle = "black"
+    context.font = "10px Georgia"
+    context.fillText("add", x - 48, y + 28);
 
 
 
 
-//           select = false;  
+    function getXY(canvas, event) { //shape 
+        const rect = canvas.getBoundingClientRect()
+        const y = event.clientY - rect.top //mouse event
+        const x = event.clientX - rect.left
+        return { x: x, y: y }
+    }
 
 
+    if(!flag){
+    document.addEventListener("mousedown", function (e) {
+        flag= true;
+        const XY = getXY(canvas, e)
+        if (context.isPointInPath(path, XY.x, XY.y)) { 
 
-//     }, false)
+          console.log(x + " " + y + "  "+ XY.x + " "+ XY.y)
+          select = true;
+        }
+    }, false)
+    }
+    
+    document.addEventListener("mousemove", function (e) {
+        flag = true;
+        const XY = getXY(canvas, e)
+        if(select){
+        if (context.isPointInPath(path, XY.x, XY.y)) { 
+
+          console.log(x + " " + y + "  "+ XY.x + " "+ XY.y)
+x
+        //  
+
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          DrawTree(XY.x, XY.x, XY.y, html, html)
+
+        // //   context.globalCompositeOperation = 'destination-out'
+        //   context.arc(x, y, 45, 0, Math.PI * 2);
+        // //   context.fill();
+        //    drawC(XY.x, XY.y, Dom.tagName)
 
 
+        }
+    }
+
+    }, false)
+    
+    if(!flag){
+    document.addEventListener("mouseup", function (e) {
+        flag=true
+          select = false;  
+    }, false)
+
+    }
 
 
-// }
+}
 
